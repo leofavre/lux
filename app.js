@@ -1,4 +1,15 @@
 (function() {
+	function offset(el) {
+		var rect = el.getBoundingClientRect(),
+			scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+			scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+		return {
+			top: rect.top + scrollTop,
+			left: rect.left + scrollLeft
+		};
+	}
+
 	var PointLux = function(container, point) {
 		this.container = container;
 		this.point = point;
@@ -64,8 +75,8 @@
 		},
 		updateStaticCoordinates: function() {
 			this.setCoordinates('static', {
-				x: this.point.offsetLeft,
-				y: this.point.offsetTop
+				x: offset(this.point).left,
+				y: offset(this.point).top,
 			});
 		},
 		updateMovingCoordinates: function(evt) {
@@ -128,32 +139,79 @@
 		}
 	};
 
-	var TypeLux = function(str) {
+	var TypeLux = function(container, str) {
+		this.container = container;
 		this.string = str;
 	};
 
 	TypeLux.letter = {
-		a: ['01110', '10001', '11111', '10001', '10001']
+		'a': ['01110', '10001', '11111', '10001', '10001'],
+		' ': ['0', '0', '0', '0', '0']
 	};
 
 	TypeLux.prototype = {
-		writeSentence: function(str) {
-
+		init: function() {
+			this.writeWords();
 		},
-		writeLetter: function(str) {
-
+		writeWords: function() {
+			for (var i = 0, lin = this.string.length; i < lin; i++) {
+				var str = this.string[i];
+				this.writeCharacter(str);
+			}
 		},
-		writeLetterPixels: function(str, index) {
+		writeCharacter: function(str) {
+			var map = TypeLux.letter[str];
 
+			if (typeof map !== 'undefined' && typeof map.length !== 'undefined') {
+				var width = map[0].length;
+				var height = map.length;
+				var characterNode = this.outputCharacter(width, height);
+
+				for (var i = 0, lin = map.length; i < lin; i++) {
+					this.writeCharacterPoints(map[i], i, characterNode);
+				}
+			}
+		},
+		outputCharacter: function(width, height) {
+			var characterNode = document.createElement('span');
+
+			characterNode.className = 'container__character';
+			characterNode.style.width = (9 * width) + 'px';
+			characterNode.style.height = (9 * height) + 'px';
+
+			this.container.appendChild(characterNode);
+
+			return characterNode;
+		},
+		writeCharacterPoints: function(line, index, characterNode) {
+			var top = index * 9,
+				left;
+
+			for (var i = 0, lin = line.length; i < lin; i++) {
+				if (line[i] === '1') {
+					left = i * 9;
+					this.outputCharacterPoint(top, left, characterNode);
+				}
+			}
+		},
+		outputCharacterPoint: function(top, left, characterNode) {
+			var characterPointNode = document.createElement('span');
+
+			characterPointNode.className = 'container__point';
+			characterPointNode.style.top = top + 'px';
+			characterPointNode.style.left = left + 'px';
+
+			characterNode.appendChild(characterPointNode);
+
+			var lux = new PointLux(this.container, characterPointNode);
+			lux.init();
+
+			return characterPointNode;
 		}
 	};
 
-	var luxPoints = [];
-	var pointNodes = document.getElementsByClassName('container__point');
 	var containerNode = document.getElementsByClassName('container')[0];
+	var sentence = new TypeLux(containerNode, 'aaa aa');
 
-	for (var i = 0, lin = pointNodes.length; i < lin; i++) {
-		luxPoints[i] = new PointLux(containerNode, pointNodes[i]);
-		luxPoints[i].init();
-	}
+	sentence.init();
 })();
