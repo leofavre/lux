@@ -17,7 +17,6 @@ body {
 
 .container__point {
 	position: absolute;
-	top: 50%;
 	left: 50%;
 	width: 400px;
 	height: 1px;
@@ -26,26 +25,30 @@ body {
 	transform-origin: 0 0;
 }
 
+.container__point:nth-child(1) {
+	top: 47%;
+}
+
 .container__point:nth-child(2) {
-	top: 51%;
+	top: 48%;
 }
 
 .container__point:nth-child(3) {
-	top: 52%;
+	top: 49%;
 }
 
 .container__point:nth-child(4) {
-	top: 53%;
+	top: 50%;
 }
 
 .container__point:nth-child(5) {
-	top: 54%;
+	top: 51%;
 }
 
 .container__point:nth-child(6) {
-	top: 55%;
+	top: 52%;
 }
 
 .container__point:nth-child(7) {
-	top: 56%;
+	top: 53%;
 }

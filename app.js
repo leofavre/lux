@@ -4,13 +4,13 @@
 		this.point = point;
 
 		this.static = {
-			x: undefined,
-			y: undefined
+			x: this.container.clientWidth / 2,
+			y: this.container.clientHeight / 2
 		};
 
 		this.moving = {
-			x: undefined,
-			y: undefined
+			x: this.container.clientWidth / 2,
+			y: this.container.clientHeight / 2
 		};
 
 		this.currentPointerId = undefined;
@@ -20,6 +20,7 @@
 		init: function() {
 			this.observePointers();
 			this.setStaticCoordinates();
+			this.updateView();
 		},
 		getCoordinates: function(which) {
 			return this[which];
