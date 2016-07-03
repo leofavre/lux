@@ -11,6 +11,8 @@
 			x: undefined,
 			y: undefined
 		};
+
+		this.currentPointerId = undefined;
 	};
 
 	Typelux.prototype = {
@@ -30,10 +32,28 @@
 			this[which] = obj;
 		},
 		observePointers: function() {
+			this.container.addEventListener('pointerdown', this.onPointerDown);
 			this.container.addEventListener('pointermove', this.onPointerMove);
+			this.container.addEventListener('pointerup', this.onPointerUp);
+		},
+		onPointerDown: function(evt) {
+			console.log('down', evt.pointerId);
+			if (typeof this.currentPointerId === 'undefined') {
+				this.currentPointerId = evt.pointerId;
+			}
 		},
 		onPointerMove: function(evt) {
-			console.log('move', evt.pointerId);
+			if (typeof this.currentPointerId === 'undefined') {
+				this.currentPointerId = evt.pointerId;
+			}
+
+			if (this.currentPointerId === evt.pointerId) {
+				console.log('move', evt.pointerId);
+			}
+		},
+		onPointerUp: function(evt) {
+			this.currentPointerId = undefined;
+			console.log('up', evt.pointerId);
 		}
 	};
 
