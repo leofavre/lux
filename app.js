@@ -105,7 +105,6 @@
 			window.addEventListener('pointerdown', onPointerBound);
 			window.addEventListener('pointermove', onPointerBound);
 			window.addEventListener('pointerup', onPointerBound);
-
 			window.addEventListener('resize', onResize);
 		},
 		onPointerBound: function(evt) {
@@ -193,6 +192,14 @@
 				if (line[i] === '1') {
 					left = i * 9;
 					this.outputCharacterPoint(top, left, characterNode);
+					this.outputCharacterPoint(top, left + 3, characterNode);
+					this.outputCharacterPoint(top, left + 6, characterNode);
+					this.outputCharacterPoint(top + 3, left, characterNode);
+					this.outputCharacterPoint(top + 3, left + 3, characterNode);
+					this.outputCharacterPoint(top + 3, left + 6, characterNode);
+					this.outputCharacterPoint(top + 6, left, characterNode);
+					this.outputCharacterPoint(top + 6, left + 3, characterNode);
+					this.outputCharacterPoint(top + 6, left + 6, characterNode);
 				}
 			}
 		},
@@ -213,7 +220,7 @@
 	};
 
 	var containerNode = document.getElementsByClassName('container')[0];
-	var sentence = new TypeLux(containerNode, 'a');
+	var sentence = new TypeLux(containerNode, 'aaa aaa aaa');
 
 	sentence.init();
 })();
