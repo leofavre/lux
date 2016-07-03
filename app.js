@@ -31,29 +31,47 @@
 		setCoordinates: function(which, obj) {
 			this[which] = obj;
 		},
+		updateMovingCoordinates: function(evt) {
+			this.setCoordinates('moving', {
+				x: evt.clientX,
+				y: evt.clientY
+			});
+		},
 		observePointers: function() {
-			this.container.addEventListener('pointerdown', this.onPointerDown);
-			this.container.addEventListener('pointermove', this.onPointerMove);
-			this.container.addEventListener('pointerup', this.onPointerUp);
-		},
-		onPointerDown: function(evt) {
-			console.log('down', evt.pointerId);
-			if (typeof this.currentPointerId === 'undefined') {
-				this.currentPointerId = evt.pointerId;
-			}
-		},
-		onPointerMove: function(evt) {
-			if (typeof this.currentPointerId === 'undefined') {
-				this.currentPointerId = evt.pointerId;
-			}
+			var self = this;
 
-			if (this.currentPointerId === evt.pointerId) {
-				console.log('move', evt.pointerId);
-			}
+			var onPointerBound = function(evt) {
+				self.onPointerBound(evt);
+			};
+
+			this.container.addEventListener('pointerdown', onPointerBound);
+			this.container.addEventListener('pointermove', onPointerBound);
+			this.container.addEventListener('pointerup', onPointerBound);
 		},
-		onPointerUp: function(evt) {
-			this.currentPointerId = undefined;
-			console.log('up', evt.pointerId);
+		onPointerBound: function(evt) {
+			if (evt.type === 'pointerdown') {
+				if (typeof this.currentPointerId === 'undefined') {
+					this.currentPointerId = evt.pointerId;
+					this.updateMovingCoordinates(evt);
+				}
+			}
+			else if (evt.type === 'pointermove') {
+				if (typeof this.currentPointerId === 'undefined') {
+					this.currentPointerId = evt.pointerId;
+				}
+				if (this.currentPointerId === evt.pointerId) {
+					this.updateMovingCoordinates(evt);
+					console.log(this.moving);
+				}
+				else {
+					return false;
+				}
+			}
+			else if (evt.type === 'pointerup') {
+				if (this.currentPointerId === evt.pointerId) {
+					this.currentPointerId = undefined;
+				}
+			}
 		}
 	};
 
