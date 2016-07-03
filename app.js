@@ -4,13 +4,13 @@
 		this.point = point;
 
 		this.static = {
-			x: this.container.clientWidth / 2,
-			y: this.container.clientHeight / 2
+			x: this.container.clientWidth / 3,
+			y: this.container.clientHeight / 3
 		};
 
 		this.moving = {
-			x: this.container.clientWidth / 2,
-			y: this.container.clientHeight / 2
+			x: this.container.clientWidth / 3,
+			y: this.container.clientHeight / 3
 		};
 
 		this.currentPointerId = undefined;
@@ -19,7 +19,7 @@
 	Typelux.prototype = {
 		init: function() {
 			this.observePointers();
-			this.setStaticCoordinates();
+			this.updateStaticCoordinates();
 			this.updateView();
 		},
 		getCoordinates: function(which) {
@@ -57,9 +57,12 @@
 		},
 		setScale: function() {
 			var dist = this.getDistanceBetweenCoordinates();
-			return 500 / dist;
+			var scale = 1 - (dist / (this.container.clientWidth / 2.5));
+			scale = (scale < 0) ? 0 : scale;
+			scale = (scale > 1) ? 1 : scale;
+			return scale;
 		},
-		setStaticCoordinates: function() {
+		updateStaticCoordinates: function() {
 			this.setCoordinates('static', {
 				x: this.point.offsetLeft,
 				y: this.point.offsetTop
@@ -82,9 +85,15 @@
 				self.onPointerBound(evt);
 			};
 
+			var onResize = function(evt) {
+				self.onResize(evt);
+			};
+
 			this.container.addEventListener('pointerdown', onPointerBound);
 			this.container.addEventListener('pointermove', onPointerBound);
 			this.container.addEventListener('pointerup', onPointerBound);
+
+			window.addEventListener('resize', onResize);
 		},
 		onPointerBound: function(evt) {
 			evt.preventDefault();
@@ -113,6 +122,9 @@
 					this.currentPointerId = undefined;
 				}
 			}
+		},
+		onResize: function(evt) {
+			this.updateStaticCoordinates();
 		}
 	};
 

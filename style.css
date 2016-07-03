@@ -18,11 +18,11 @@ body {
 .container__point {
 	position: absolute;
 	left: 50%;
-	width: 400px;
+	width: 600px;
 	height: 1px;
 	background: #fff;
 	background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
-	opacity: 0.2;
+	opacity: 0.5;
 	transform-origin: 0 0;
 }
 
