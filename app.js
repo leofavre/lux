@@ -1,5 +1,5 @@
 (function() {
-	var Typelux = function(container, point) {
+	var PointLux = function(container, point) {
 		this.container = container;
 		this.point = point;
 
@@ -16,7 +16,7 @@
 		this.currentPointerId = undefined;
 	};
 
-	Typelux.prototype = {
+	PointLux.prototype = {
 		init: function() {
 			this.observePointers();
 			this.updateStaticCoordinates();
@@ -128,12 +128,32 @@
 		}
 	};
 
+	var TypeLux = function(str) {
+		this.string = str;
+	};
+
+	TypeLux.letter = {
+		a: ['01110', '10001', '11111', '10001', '10001']
+	};
+
+	TypeLux.prototype = {
+		writeSentence: function(str) {
+
+		},
+		writeLetter: function(str) {
+
+		},
+		writeLetterPixels: function(str, index) {
+
+		}
+	};
+
 	var luxPoints = [];
 	var pointNodes = document.getElementsByClassName('container__point');
 	var containerNode = document.getElementsByClassName('container')[0];
 
 	for (var i = 0, lin = pointNodes.length; i < lin; i++) {
-		luxPoints[i] = new Typelux(containerNode, pointNodes[i]);
+		luxPoints[i] = new PointLux(containerNode, pointNodes[i]);
 		luxPoints[i].init();
 	}
 })();
