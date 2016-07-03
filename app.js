@@ -1,6 +1,7 @@
 (function() {
-	var Typelux = function(container) {
+	var Typelux = function(container, point) {
 		this.container = container;
+		this.point = point;
 
 		this.static = {
 			x: undefined,
@@ -18,6 +19,7 @@
 	Typelux.prototype = {
 		init: function() {
 			this.observePointers();
+			this.setStaticCoordinates();
 		},
 		getCoordinates: function(which) {
 			return this[which];
@@ -28,14 +30,32 @@
 		getY: function(which) {
 			return this.getCoordinates(which).y;
 		},
+		getRelativeX: function() {
+			return this.getX('moving') - this.getX('static');
+		},
+		getRelativeY: function() {
+			return -this.getY('moving') + this.getY('static');
+		},
+		getDistanceBetweenCoordinates: function() {
+			return Math.sqrt(Math.pow(this.getRelativeX(), 2) + Math.pow(this.getRelativeY(), 2));
+		},
 		setCoordinates: function(which, obj) {
 			this[which] = obj;
+		},
+		setStaticCoordinates: function() {
+			this.setCoordinates('static', {
+				x: this.point.offsetLeft,
+				y: this.point.offsetTop
+			});
 		},
 		updateMovingCoordinates: function(evt) {
 			this.setCoordinates('moving', {
 				x: evt.clientX,
 				y: evt.clientY
 			});
+		},
+		updateView: function() {
+			console.log(this.getDistanceBetweenCoordinates());
 		},
 		observePointers: function() {
 			var self = this;
@@ -53,6 +73,7 @@
 				if (typeof this.currentPointerId === 'undefined') {
 					this.currentPointerId = evt.pointerId;
 					this.updateMovingCoordinates(evt);
+					this.updateView();
 				}
 			}
 			else if (evt.type === 'pointermove') {
@@ -61,7 +82,7 @@
 				}
 				if (this.currentPointerId === evt.pointerId) {
 					this.updateMovingCoordinates(evt);
-					console.log(this.moving);
+					this.updateView();
 				}
 				else {
 					return false;
@@ -76,7 +97,8 @@
 	};
 
 	var containerNode = document.getElementsByClassName('container')[0];
-	var test = new Typelux(containerNode);
+	var pointNode = document.getElementsByClassName('container__point')[0];
+	var test = new Typelux(containerNode, pointNode);
 	test.init();
 })();
 
@@ -106,14 +128,14 @@ y = (this._y * -1) - n;
 // definição do ângulo em que a figura deve rotacionada
 // distância entre o ponto (m,n) e o ponto (x,y)
 
-dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-
 
 
 
 // ângulo formado pela retas (m,n)(x,y) e (m,n)(x,n)
 // como essa função só gera ângulos positivos, há um *if* para
 // tornar negativos os ângulos do quadrante superior.
+
+dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
 if (dist <= 100) {
 
