@@ -43,8 +43,8 @@
 			return Math.sqrt(Math.pow(relX, 2) + Math.pow(relY, 2));
 		},
 		getRotationAngle: function() {
-			var relX = -this.getRelativeX(),
-				relY = -this.getRelativeY(),
+			var relX = this.getRelativeX() * -1, // consider opposite pointer position
+				relY = this.getRelativeY() * -1, // consider opposite pointer position
 				dist = this.getDistanceBetweenCoordinates();
 
 			var k = (relY < 0) ? -1 : 1;
@@ -82,6 +82,8 @@
 			this.container.addEventListener('pointerup', onPointerBound);
 		},
 		onPointerBound: function(evt) {
+			evt.preventDefault();
+
 			if (evt.type === 'pointerdown') {
 				if (typeof this.currentPointerId === 'undefined') {
 					this.currentPointerId = evt.pointerId;
@@ -110,11 +112,11 @@
 	};
 
 	var luxPoints = [];
-	var pointNode = document.getElementsByClassName('container__point')[0];
-	var containerNodes = document.getElementsByClassName('container');
+	var pointNodes = document.getElementsByClassName('container__point');
+	var containerNode = document.getElementsByClassName('container')[0];
 
-	for (var i = 0, lin = containerNodes.length; i < lin; i++) {
-		luxPoints[i] = new Typelux(containerNodes[i], pointNode);
+	for (var i = 0, lin = pointNodes.length; i < lin; i++) {
+		luxPoints[i] = new Typelux(containerNode, pointNodes[i]);
 		luxPoints[i].init();
 	}
 })();
