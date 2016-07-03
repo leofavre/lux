@@ -1,5 +1,7 @@
 (function() {
 	function offset(el) {
+		// as seen on https://plainjs.com/javascript/styles/get-the-position-of-an-element-relative-to-the-document-24/
+
 		var rect = el.getBoundingClientRect(),
 			scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
 			scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -100,9 +102,9 @@
 				self.onResize(evt);
 			};
 
-			this.container.addEventListener('pointerdown', onPointerBound);
-			this.container.addEventListener('pointermove', onPointerBound);
-			this.container.addEventListener('pointerup', onPointerBound);
+			window.addEventListener('pointerdown', onPointerBound);
+			window.addEventListener('pointermove', onPointerBound);
+			window.addEventListener('pointerup', onPointerBound);
 
 			window.addEventListener('resize', onResize);
 		},
@@ -211,7 +213,7 @@
 	};
 
 	var containerNode = document.getElementsByClassName('container')[0];
-	var sentence = new TypeLux(containerNode, 'aaa aa');
+	var sentence = new TypeLux(containerNode, 'a');
 
 	sentence.init();
 })();
