@@ -43,7 +43,10 @@
 
 			return Math.sqrt(Math.pow(relX, 2) + Math.pow(relY, 2));
 		},
-		getRotationAngle: function() {
+		setCoordinates: function(which, obj) {
+			this[which] = obj;
+		},
+		setRotation: function() {
 			var relX = this.getRelativeX() * -1, // consider opposite pointer position
 				relY = this.getRelativeY() * -1, // consider opposite pointer position
 				dist = this.getDistanceBetweenCoordinates();
@@ -52,8 +55,8 @@
 
 			return k * Math.acos(relX / dist) * 180 / Math.PI;
 		},
-		setCoordinates: function(which, obj) {
-			this[which] = obj;
+		setScale: function() {
+
 		},
 		setStaticCoordinates: function() {
 			this.setCoordinates('static', {
@@ -68,8 +71,8 @@
 			});
 		},
 		updateView: function() {
-			this.point.style.transform = 'rotate(' + this.getRotationAngle() + 'deg)';
-			this.point.style.webkitTransform = 'rotate(' + this.getRotationAngle() + 'deg)';
+			this.point.style.transform = 'rotate(' + this.setRotation() + 'deg)';
+			this.point.style.webkitTransform = 'rotate(' + this.setRotation() + 'deg)';
 		},
 		observePointers: function() {
 			var self = this;
