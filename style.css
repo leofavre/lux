@@ -22,7 +22,7 @@ body {
 	height: 1px;
 	background: #fff;
 	background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
-	opacity: 0.5;
+	opacity: 0.35;
 	transform-origin: 0 0;
 }
 
