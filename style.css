@@ -6,6 +6,7 @@ body {
 
 body {
 	background-color: #000;
+	overflow: hidden;
 }
 
 .container {
@@ -14,9 +15,11 @@ body {
 	justify-content: center;
 	align-items: center;
 
+	margin: auto;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	background: #0d0d0d;
+	overflow: visible;
 }
 
 .container__character {
@@ -30,7 +33,7 @@ body {
 
 .container__point {
 	position: absolute;
-	width: 600px;
+	width: 400px;
 	height: 1px;
 	background: #fff;
 	background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
