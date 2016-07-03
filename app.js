@@ -56,7 +56,8 @@
 			return k * Math.acos(relX / dist) * 180 / Math.PI;
 		},
 		setScale: function() {
-
+			var dist = this.getDistanceBetweenCoordinates();
+			return 500 / dist;
 		},
 		setStaticCoordinates: function() {
 			this.setCoordinates('static', {
@@ -71,8 +72,8 @@
 			});
 		},
 		updateView: function() {
-			this.point.style.transform = 'rotate(' + this.setRotation() + 'deg)';
-			this.point.style.webkitTransform = 'rotate(' + this.setRotation() + 'deg)';
+			this.point.style.transform = 'rotate(' + this.setRotation() + 'deg) scaleX(' + this.setScale() + ')';
+			this.point.style.webkitTransform = 'rotate(' + this.setRotation() + 'deg) scaleX(' + this.setScale() + ')';
 		},
 		observePointers: function() {
 			var self = this;
