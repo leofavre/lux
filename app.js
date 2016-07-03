@@ -37,7 +37,16 @@
 			return -this.getY('moving') + this.getY('static');
 		},
 		getDistanceBetweenCoordinates: function() {
-			return Math.sqrt(Math.pow(this.getRelativeX(), 2) + Math.pow(this.getRelativeY(), 2));
+			var relX = this.getRelativeX(),
+				relY = this.getRelativeY();
+
+			return Math.sqrt(Math.pow(relX, 2) + Math.pow(relY, 2));
+		},
+		getRotationAngle: function() {
+			var relX = this.getRelativeX(),
+				dist = this.getDistanceBetweenCoordinates();
+
+			return Math.acos(relX / dist) * 180 / Math.PI;
 		},
 		setCoordinates: function(which, obj) {
 			this[which] = obj;
@@ -55,7 +64,8 @@
 			});
 		},
 		updateView: function() {
-			console.log(this.getDistanceBetweenCoordinates());
+			// console.log(this.getDistanceBetweenCoordinates());
+			console.log(this.getRotationAngle());
 		},
 		observePointers: function() {
 			var self = this;
