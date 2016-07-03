@@ -22,4 +22,5 @@ body {
 	height: 1px;
 	background-color: #fff;
 	opacity: 0.2;
+	transform-origin: 0 0;
 }

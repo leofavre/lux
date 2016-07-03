@@ -34,7 +34,7 @@
 			return this.getX('moving') - this.getX('static');
 		},
 		getRelativeY: function() {
-			return -this.getY('moving') + this.getY('static');
+			return this.getY('moving') - this.getY('static');
 		},
 		getDistanceBetweenCoordinates: function() {
 			var relX = this.getRelativeX(),
@@ -43,8 +43,8 @@
 			return Math.sqrt(Math.pow(relX, 2) + Math.pow(relY, 2));
 		},
 		getRotationAngle: function() {
-			var relX = this.getRelativeX(),
-				relY = this.getRelativeY(),
+			var relX = -this.getRelativeX(),
+				relY = -this.getRelativeY(),
 				dist = this.getDistanceBetweenCoordinates();
 
 			var k = (relY < 0) ? -1 : 1;
@@ -67,8 +67,8 @@
 			});
 		},
 		updateView: function() {
-			console.log('distance: ' + this.getDistanceBetweenCoordinates() + 'px');
-			console.log('angle: ' + this.getRotationAngle() + 'deg');
+			this.point.style.transform = 'rotate(' + this.getRotationAngle() + 'deg)';
+			this.point.style.webkitTransform = 'rotate(' + this.getRotationAngle() + 'deg)';
 		},
 		observePointers: function() {
 			var self = this;
@@ -109,66 +109,12 @@
 		}
 	};
 
-	var containerNode = document.getElementsByClassName('container')[0];
+	var luxPoints = [];
 	var pointNode = document.getElementsByClassName('container__point')[0];
-	var test = new Typelux(containerNode, pointNode);
-	test.init();
+	var containerNodes = document.getElementsByClassName('container');
+
+	for (var i = 0, lin = containerNodes.length; i < lin; i++) {
+		luxPoints[i] = new Typelux(containerNodes[i], pointNode);
+		luxPoints[i].init();
+	}
 })();
-
-
-/*
-// descrição
-// elemento gráfico posicionado em (x,y) que aponta para as
-// coordenadas (m,n) do mouse e tem seu comprimento variando em
-// função da distância (m,n)(x,y).
-
-
-
-
-// coordenadas do mouse (m,n) e da figura (x,y)
-// n e y são multiplicados por -1 pois o flash considera o quadrante
-// inferior como sendo positivo, quando na verdade é negativo.
-
-m = _root.ponto._x;
-n = _root.ponto._y * -1;
-
-x = (this._x) - m;
-y = (this._y * -1) - n;
-
-
-
-
-// definição do ângulo em que a figura deve rotacionada
-// distância entre o ponto (m,n) e o ponto (x,y)
-
-
-
-
-// ângulo formado pela retas (m,n)(x,y) e (m,n)(x,n)
-// como essa função só gera ângulos positivos, há um *if* para
-// tornar negativos os ângulos do quadrante superior.
-
-dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-
-if (dist <= 100) {
-
-	figura._visible = 1;
-	angulo = (Math.acos(x / dist) * 180 / Math.PI);
-	max = dist;
-
-	if (y <= 0) {
-		figura._rotation = angulo;
-	}
-	else {
-		figura._rotation = angulo * -1;
-	}
-
-}
-else {
-	max = 110;
-	figura._rotation = 0;
-	figura._visible = 0;
-}
-
-figura._xscale = 20 + ((100 - max) * 14.4);
-*/
