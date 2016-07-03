@@ -20,7 +20,8 @@ body {
 	left: 50%;
 	width: 400px;
 	height: 1px;
-	background-color: #fff;
+	background: #fff;
+	background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
 	opacity: 0.2;
 	transform-origin: 0 0;
 }
