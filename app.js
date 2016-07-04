@@ -128,17 +128,27 @@
 		}
 	};
 
-	var max = 90;
+	var Graph = function(container, max) {
+		this.container = container;
+		this.max = max || 90;
+	};
+
+	Graph.prototype = {
+		init: function() {
+			for (var i = 0; i < this.max; i++) {
+				var point = document.createElement('span');
+				point.className = 'container__point';
+				point.style.top = '50%';
+				point.style.left = ((100 / (this.max + 1)) * (i + 1)) + '%';
+				this.container.appendChild(point);
+
+				var lux = new PointLux(this.container, point);
+				lux.init();
+			}
+		}
+	};
+
 	var container = document.getElementsByClassName('container')[0];
-
-	for (var i = 0; i < max; i++) {
-		var point = document.createElement('span');
-		point.className = 'container__point';
-		point.style.top = '50%';
-		point.style.left = ((100 / (max + 1)) * (i + 1)) + '%';
-		container.appendChild(point);
-
-		var lux = new PointLux(container, point);
-		lux.init();
-	}
+	var graph = new Graph(container, 90);
+	graph.init();
 })();
