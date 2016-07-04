@@ -1,28 +1,15 @@
 (function() {
-	function offset(el) {
-		// as seen on https://plainjs.com/javascript/styles/get-the-position-of-an-element-relative-to-the-document-24/
-
-		var rect = el.getBoundingClientRect(),
-			scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-			scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-		return {
-			top: rect.top + scrollTop,
-			left: rect.left + scrollLeft
-		};
-	}
-
 	var PointLux = function(container, point) {
 		this.container = container;
 		this.point = point;
 
 		this.static = {
-			x: this.container.clientWidth / 3,
+			x: this.container.clientWidth / 2,
 			y: this.container.clientHeight / 3
 		};
 
 		this.moving = {
-			x: this.container.clientWidth / 3,
+			x: this.container.clientWidth / 2,
 			y: this.container.clientHeight / 3
 		};
 
@@ -77,8 +64,8 @@
 		},
 		updateStaticCoordinates: function() {
 			this.setCoordinates('static', {
-				x: offset(this.point).left,
-				y: offset(this.point).top,
+				x: this.point.offsetLeft,
+				y: this.point.offsetTop,
 			});
 		},
 		updateMovingCoordinates: function(evt) {
@@ -102,9 +89,10 @@
 				self.onResize(evt);
 			};
 
-			window.addEventListener('pointerdown', onPointerBound);
-			window.addEventListener('pointermove', onPointerBound);
-			window.addEventListener('pointerup', onPointerBound);
+			this.container.addEventListener('pointerdown', onPointerBound);
+			this.container.addEventListener('pointermove', onPointerBound);
+			this.container.addEventListener('pointerup', onPointerBound);
+
 			window.addEventListener('resize', onResize);
 		},
 		onPointerBound: function(evt) {
@@ -140,87 +128,27 @@
 		}
 	};
 
-	var TypeLux = function(container, str) {
+	var Graph = function(container, max) {
 		this.container = container;
-		this.string = str;
+		this.max = max || 90;
 	};
 
-	TypeLux.letter = {
-		'a': ['01110', '10001', '11111', '10001', '10001'],
-		' ': ['0', '0', '0', '0', '0']
-	};
-
-	TypeLux.prototype = {
+	Graph.prototype = {
 		init: function() {
-			this.writeWords();
-		},
-		writeWords: function() {
-			for (var i = 0, lin = this.string.length; i < lin; i++) {
-				var str = this.string[i];
-				this.writeCharacter(str);
+			for (var i = 0; i < this.max; i++) {
+				var point = document.createElement('span');
+				point.className = 'container__point';
+				point.style.top = '50%';
+				point.style.left = ((100 / (this.max + 1)) * (i + 1)) + '%';
+				this.container.appendChild(point);
+
+				var lux = new PointLux(this.container, point);
+				lux.init();
 			}
-		},
-		writeCharacter: function(str) {
-			var map = TypeLux.letter[str];
-
-			if (typeof map !== 'undefined' && typeof map.length !== 'undefined') {
-				var width = map[0].length;
-				var height = map.length;
-				var characterNode = this.outputCharacter(width, height);
-
-				for (var i = 0, lin = map.length; i < lin; i++) {
-					this.writeCharacterPoints(map[i], i, characterNode);
-				}
-			}
-		},
-		outputCharacter: function(width, height) {
-			var characterNode = document.createElement('span');
-
-			characterNode.className = 'container__character';
-			characterNode.style.width = (9 * width) + 'px';
-			characterNode.style.height = (9 * height) + 'px';
-
-			this.container.appendChild(characterNode);
-
-			return characterNode;
-		},
-		writeCharacterPoints: function(line, index, characterNode) {
-			var top = index * 9,
-				left;
-
-			for (var i = 0, lin = line.length; i < lin; i++) {
-				if (line[i] === '1') {
-					left = i * 9;
-					this.outputCharacterPoint(top, left, characterNode);
-					this.outputCharacterPoint(top, left + 3, characterNode);
-					this.outputCharacterPoint(top, left + 6, characterNode);
-					this.outputCharacterPoint(top + 3, left, characterNode);
-					this.outputCharacterPoint(top + 3, left + 3, characterNode);
-					this.outputCharacterPoint(top + 3, left + 6, characterNode);
-					this.outputCharacterPoint(top + 6, left, characterNode);
-					this.outputCharacterPoint(top + 6, left + 3, characterNode);
-					this.outputCharacterPoint(top + 6, left + 6, characterNode);
-				}
-			}
-		},
-		outputCharacterPoint: function(top, left, characterNode) {
-			var characterPointNode = document.createElement('span');
-
-			characterPointNode.className = 'container__point';
-			characterPointNode.style.top = top + 'px';
-			characterPointNode.style.left = left + 'px';
-
-			characterNode.appendChild(characterPointNode);
-
-			var lux = new PointLux(this.container, characterPointNode);
-			lux.init();
-
-			return characterPointNode;
 		}
 	};
 
-	var containerNode = document.getElementsByClassName('container')[0];
-	var sentence = new TypeLux(containerNode, 'aaa aaa aaa');
-
-	sentence.init();
+	var container = document.getElementsByClassName('container')[0];
+	var graph = new Graph(container, 90);
+	graph.init();
 })();
