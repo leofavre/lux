@@ -137,18 +137,24 @@
 		init: function() {
 			for (var i = 0; i < this.max; i++) {
 				var point = document.createElement('span');
-				point.className = 'container__point';
-				point.style.top = '50%';
-				point.style.left = ((100 / (this.max + 1)) * (i + 1)) + '%';
-				this.container.appendChild(point);
+				var left = (100 / (this.max + 1)) * (i + 1);
+				var top = 50;
 
-				var lux = new PointLux(this.container, point);
-				lux.init();
+				this.appendPoint(point, top + '%', left + '%');
 			}
+		},
+		appendPoint: function(point, top, left) {
+			point.className = 'container__point';
+			point.style.top = top;
+			point.style.left = left;
+			this.container.appendChild(point);
+
+			var lux = new PointLux(this.container, point);
+			lux.init();
 		}
 	};
 
 	var container = document.getElementsByClassName('container')[0];
-	var graph = new Graph(container, 90);
+	var graph = new Graph(container, 140);
 	graph.init();
 })();
