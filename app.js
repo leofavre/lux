@@ -4,12 +4,12 @@
 		this.point = point;
 
 		this.static = {
-			x: this.container.clientWidth / 3,
+			x: this.container.clientWidth / 2,
 			y: this.container.clientHeight / 3
 		};
 
 		this.moving = {
-			x: this.container.clientWidth / 3,
+			x: this.container.clientWidth / 2,
 			y: this.container.clientHeight / 3
 		};
 
@@ -89,9 +89,10 @@
 				self.onResize(evt);
 			};
 
-			window.addEventListener('pointerdown', onPointerBound);
-			window.addEventListener('pointermove', onPointerBound);
-			window.addEventListener('pointerup', onPointerBound);
+			this.container.addEventListener('pointerdown', onPointerBound);
+			this.container.addEventListener('pointermove', onPointerBound);
+			this.container.addEventListener('pointerup', onPointerBound);
+
 			window.addEventListener('resize', onResize);
 		},
 		onPointerBound: function(evt) {
@@ -126,4 +127,18 @@
 			this.updateStaticCoordinates();
 		}
 	};
+
+	var max = 90;
+	var container = document.getElementsByClassName('container')[0];
+
+	for (var i = 0; i < max; i++) {
+		var point = document.createElement('span');
+		point.className = 'container__point';
+		point.style.top = '50%';
+		point.style.left = ((100 / (max + 1)) * (i + 1)) + '%';
+		container.appendChild(point);
+
+		var lux = new PointLux(container, point);
+		lux.init();
+	}
 })();
